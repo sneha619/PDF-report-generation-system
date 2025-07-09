@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Allycare Assessment Report</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { 
+            font-family: 'Inter', sans-serif; 
+            margin: 0;
+            padding: 0;
+        }
+        .gradient-bg { 
+            background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 50%, #1e40af 100%);
+        }
+        .card-shadow { 
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); 
+        }
+        .status-good { background-color: #10b981; color: white; }
+        .status-normal { background-color: #3b82f6; color: white; }
+        .metric-bar {
+            height: 8px;
+            background: linear-gradient(to right, #ef4444 0%, #f59e0b 50%, #10b981 100%);
+            border-radius: 4px;
+            position: relative;
+        }
+        .metric-indicator {
+            position: absolute;
+            top: -2px;
+            width: 12px;
+            height: 12px;
+            background: #1f2937;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+        @media print {
+            body { -webkit-print-color-adjust: exact; }
+            .gradient-bg { background: #1e3a8a !important; }
+        }
+    </style>
+</head>
+<body style="background: #f9fafb;">
+    <!-- Header Section -->
+    <div class="gradient-bg" style="color: white; padding: 2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem;">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="currentColor">
+                        <path d="M16 2L20 10L28 10L22 16L24 24L16 20L8 24L10 16L4 10L12 10L16 2Z"/>
+                    </svg>
+                    <span style="font-size: 1.5rem; font-weight: 700;">Rootally</span>
+                </div>
+                <span style="font-size: 1.25rem; font-weight: 600; margin-left: 0.5rem;">AI</span>
+            </div>
+            <div style="text-align: right;">
+                <div style="font-size: 2rem; font-weight: 700; letter-spacing: 0.1em;">ALLYCARE</div>
+                <div style="font-size: 0.875rem; opacity: 0.9;">Health Assessment Platform</div>
+            </div>
+        </div>
+        
+        <div style="background: #2563eb; border-radius: 0.5rem; padding: 1rem; text-align: center; margin-bottom: 2rem;">
+            <h1 style="font-size: 1.5rem; font-weight: 700; margin: 0;">Allycare Assessment Report</h1>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem;">
+            <div>
+                <div style="font-size: 0.875rem; opacity: 0.9; margin-bottom: 0.25rem;">Name:</div>
+                <div style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">{{patientName}}</div>
+                <div style="font-size: 0.875rem; opacity: 0.9; margin-bottom: 0.25rem;">Date of assessment:</div>
+                <div style="font-weight: 500;">{assessmentDate}</div>
+            </div>
+            <div style="text-align: center;">
+                <div style="font-size: 0.875rem; opacity: 0.9; margin-bottom: 0.25rem;">Gender:</div>
+                <div style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">{{gender}}</div>
+                <div style="font-size: 0.875rem; opacity: 0.9; margin-bottom: 0.25rem;">Age:</div>
+                <div style="font-weight: 500;">{{age}} years</div>
+            </div>
+            <div style="text-align: right;">
+                <div style="font-size: 0.875rem; opacity: 0.9; margin-bottom: 0.25rem;">Session ID:</div>
+                <div style="font-size: 1rem; font-weight: 600; margin-bottom: 1rem;">{{sessionId}}</div>
+                <div style="font-size: 0.875rem; opacity: 0.9; margin-bottom: 0.25rem;">Height/Weight:</div>
+                <div style="font-weight: 500;">{{height}}cm / {{weight}}kg</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div style="padding: 2rem; background: #f9fafb;">
+        <!-- Health Score Section -->
+        <div style="background: white; border-radius: 0.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); padding: 1.5rem; margin-bottom: 2rem;">
+            <div style="display: flex; align-items: flex-start; gap: 1.5rem;">
+                <div style="flex: 1;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="#2563eb">
+                            <path fill-rule="evenodd" d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22ZM16.7071 9.70711C17.0976 9.31658 17.0976 8.68342 16.7071 8.29289C16.3166 7.90237 15.6834 7.90237 15.2929 8.29289L11 12.5858L8.70711 10.2929C8.31658 9.90237 7.68342 9.90237 7.29289 10.2929C6.90237 10.6834 6.90237 11.3166 7.29289 11.7071L10.2929 14.7071C10.6834 15.0976 11.3166 15.0976 11.7071 14.7071L16.7071 9.70711Z" clip-rule="evenodd"/>
+                        </svg>
+                        <h2 style="font-size: 1.25rem; font-weight: 700; color: #1f2937; margin: 0;">Health Score</h2>
+                    </div>
+                    <p style="color: #6b7280; font-size: 0.875rem; line-height: 1.5; margin: 0;">
+                        This score is based on the assessments you've completed. Offering a clear snapshot of your current health and fitness. Use it to track progress and target areas for improvement.
+                    </p>
+                </div>
+                <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1.5rem; text-align: center; min-width: 200px;">
+                    {{healthScore_status}}
+                    <div style="font-size: 2.5rem; font-weight: 700; color: #1f2937; margin-bottom: 0.5rem;">{{healthScore}}%</div>
+                    <div style="font-size: 0.875rem; color: #6b7280; margin-bottom: 1rem;">Assessment Score</div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+                        <div style="text-align: center; padding: 0.75rem; background: #f0f9ff; border-radius: 0.375rem;">
+                            <div style="font-size: 1.25rem; font-weight: 600; color: #0369a1;">{{wellnessScore}}</div>
+                            <div style="font-size: 0.75rem; color: #6b7280;">Wellness Score</div>
+                        </div>
+                        <div style="text-align: center; padding: 0.75rem; background: #fef3c7; border-radius: 0.375rem;">
+                            <div style="font-size: 1.25rem; font-weight: 600; color: #d97706;">{{healthRiskScore}}</div>
+                            <div style="font-size: 0.75rem; color: #6b7280;">Risk Score</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Key Body Vitals Section -->
+        <div style="background: white; border-radius: 0.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); padding: 1.5rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.25rem; font-weight: 700; color: #1f2937; text-align: center; margin-bottom: 1.5rem;">Key Body Vitals</h2>
+            
+            <!-- Heart Rate -->
+            <div style="margin-bottom: 2rem;">
+                <div style="display: flex; align-items: flex-start; gap: 1.5rem;">
+                    <div style="flex: 1;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="#ef4444">
+                                <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+                            </svg>
+                            <h3 style="font-weight: 600; color: #1f2937; margin: 0;">Heart Rate</h3>
+                        </div>
+                        <p style="color: #6b7280; font-size: 0.875rem; margin: 0;">
+                            The heart rate is the number of times heart beats in a minute. A normal resting heart rate for adults ranges from 60 to 100 beats per minute.
+                        </p>
+                    </div>
+                    <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1rem; text-align: center; min-width: 200px;">
+                        {{heartRate_status}}
+                        <div style="font-size: 2rem; font-weight: 700; color: #1f2937; margin-bottom: 0.25rem;">{{heartRate}}</div>
+                        <div style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.75rem;">beats/min</div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #9ca3af; margin-bottom: 0.25rem;">
+                            <span>Low</span>
+                            <span style="font-weight: 500; color: #2563eb;">Normal</span>
+                            <span>High</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #6b7280;">
+                            <span>30</span>
+                            <span>60</span>
+                            <span>100</span>
+                            <span>220</span>
+                        </div>
+                        {{heartRate_bar}}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Respiration Rate -->
+            <div style="margin-bottom: 2rem;">
+                <div style="display: flex; align-items: flex-start; gap: 1.5rem;">
+                    <div style="flex: 1;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="#3b82f6">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                            </svg>
+                            <h3 style="font-weight: 600; color: #1f2937; margin: 0;">Respiration Rate</h3>
+                        </div>
+                        <p style="color: #6b7280; font-size: 0.875rem; margin: 0;">
+                            The respiration rate is the number of breaths taken per minute. It is typically measured at rest by counting the chest rises for one minute.
+                        </p>
+                    </div>
+                    <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1rem; text-align: center; min-width: 200px;">
+                        {{respirationRate_status}}
+                        <div style="font-size: 2rem; font-weight: 700; color: #1f2937; margin-bottom: 0.25rem;">{{respirationRate}}</div>
+                        <div style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.75rem;">breaths/min</div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #9ca3af; margin-bottom: 0.25rem;">
+                            <span>Low</span>
+                            <span style="font-weight: 500; color: #2563eb;">Normal</span>
+                            <span>High</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #6b7280;">
+                            <span>10</span>
+                            <span>12</span>
+                            <span>20</span>
+                            <span>30</span>
+                        </div>
+                        {{respirationRate_bar}}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Blood Pressure -->
+            <div style="margin-bottom: 2rem;">
+                <div style="display: flex; align-items: flex-start; gap: 1.5rem;">
+                    <div style="flex: 1;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="#dc2626">
+                                <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/>
+                            </svg>
+                            <h3 style="font-weight: 600; color: #1f2937; margin: 0;">Blood Pressure</h3>
+                        </div>
+                        <p style="color: #6b7280; font-size: 0.875rem; margin: 0;">
+                            Blood pressure measures the force of blood against artery walls. Normal range is typically below 120/80 mmHg.
+                        </p>
+                    </div>
+                    <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1rem; text-align: center; min-width: 200px;">
+                        <div style="display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                            {{bpSys_status}}
+                            {{bpDia_status}}
+                        </div>
+                        <div style="font-size: 1.75rem; font-weight: 700; color: #1f2937; margin-bottom: 0.25rem;">{{bpSys}}/{{bpDia}}</div>
+                        <div style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.75rem;">mmHg</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                            <div style="text-align: center;">
+                                <div style="font-size: 0.75rem; color: #6b7280;">Systolic</div>
+                                {{bpSys_bar}}
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 0.75rem; color: #6b7280;">Diastolic</div>
+                                {{bpDia_bar}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Oxygen Saturation -->
+            <div style="margin-bottom: 2rem;">
+                <div style="display: flex; align-items: flex-start; gap: 1.5rem;">
+                    <div style="flex: 1;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="#059669">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                            <h3 style="font-weight: 600; color: #1f2937; margin: 0;">Oxygen Saturation</h3>
+                        </div>
+                        <p style="color: #6b7280; font-size: 0.875rem; margin: 0;">
+                            Oxygen saturation measures the percentage of oxygen-saturated hemoglobin in the blood. Normal levels are 95-100%.
+                        </p>
+                    </div>
+                    <div style="background: #f9fafb; border-radius: 0.5rem; padding: 1rem; text-align: center; min-width: 200px;">
+                        <div style="font-size: 2rem; font-weight: 700; color: #1f2937; margin-bottom: 0.25rem;">{{oxygenSaturation}}%</div>
+                        <div style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.75rem;">SpO2</div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #9ca3af; margin-bottom: 0.25rem;">
+                            <span>Low</span>
+                            <span style="font-weight: 500; color: #059669;">Normal</span>
+                            <span>High</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #6b7280;">
+                            <span>90</span>
+                            <span>95</span>
+                            <span>98</span>
+                            <span>100</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Exercise Results -->
+        <div style="background: white; border-radius: 0.75rem; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); padding: 2rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; color: #1f2937; margin-bottom: 1.5rem;">Exercise Performance</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                <!-- Jog Test -->
+                <div style="background: #f8fafc; border-radius: 0.5rem; padding: 1.5rem; text-align: center;">
+                    <div style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">{{jogTestName}}</div>
+                    <div style="font-size: 2rem; font-weight: 700; color: #3b82f6; margin-bottom: 0.25rem;">{{jogTestTime}}</div>
+                    <div style="font-size: 0.875rem; color: #6b7280;">seconds</div>
+                </div>
+                
+                <!-- Squat Test -->
+                <div style="background: #f0fdf4; border-radius: 0.5rem; padding: 1.5rem; text-align: center;">
+                    <div style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">{{squatTestName}}</div>
+                    <div style="font-size: 2rem; font-weight: 700; color: #059669; margin-bottom: 0.25rem;">{{squatReps}}</div>
+                    <div style="font-size: 0.875rem; color: #6b7280;">repetitions</div>
+                </div>
+                
+                <!-- Posture Analysis -->
+                <div style="background: #fef3c7; border-radius: 0.5rem; padding: 1.5rem; text-align: center;">
+                    <div style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Posture Analysis</div>
+                    <div style="font-size: 1.25rem; font-weight: 600; color: #d97706; margin-bottom: 0.25rem;">{{postureAnalysis}}</div>
+                    <div style="font-size: 0.875rem; color: #6b7280;">assessment</div>
+                </div>
+                
+                <!-- Flexibility Test -->
+                <div style="background: #fdf2f8; border-radius: 0.5rem; padding: 1.5rem; text-align: center;">
+                    <div style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">{{flexibilityTestName}}</div>
+                    <div style="font-size: 2rem; font-weight: 700; color: #be185d; margin-bottom: 0.25rem;">{{flexibilityDistance}}</div>
+                    <div style="font-size: 0.875rem; color: #6b7280;">cm</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Body Composition Analysis -->
+        <div style="background: white; border-radius: 0.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); padding: 1.5rem;">
+            <h2 style="font-size: 1.25rem; font-weight: 700; color: #1f2937; margin-bottom: 1.5rem;">Body Composition Analysis</h2>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;">
+                <div style="text-align: center; padding: 1rem; background: #f8fafc; border-radius: 0.5rem;">
+                    <div style="font-size: 1.5rem; font-weight: 700; color: #2563eb; margin-bottom: 0.25rem;">{{bmi}}</div>
+                    <div style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.5rem;">BMI</div>
+                    <div style="font-size: 0.75rem; color: #10b981;">Normal Range</div>
+                </div>
+                <div style="text-align: center; padding: 1rem; background: #f8fafc; border-radius: 0.5rem;">
+                    <div style="font-size: 1.5rem; font-weight: 700; color: #10b981; margin-bottom: 0.25rem;">{{bodyFat}}%</div>
+                    <div style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.5rem;">Body Fat</div>
+                    <div style="font-size: 0.75rem; color: #10b981;">Healthy</div>
+                </div>
+                <div style="text-align: center; padding: 1rem; background: #f8fafc; border-radius: 0.5rem;">
+                    <div style="font-size: 1.5rem; font-weight: 700; color: #7c3aed; margin-bottom: 0.25rem;">{{wellnessScore}}</div>
+                    <div style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.5rem;">Wellness Score</div>
+                    <div style="font-size: 0.75rem; color: #10b981;">Excellent</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Blood Pressure Chart
+        const bpCtx = document.getElementById('bpChart').getContext('2d');
+        new Chart(bpCtx, {
+            type: 'line',
+            data: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                datasets: [{
+                    label: 'Systolic',
+                    data: '[{{bpSys}}, {{bpSys}}-5, {{bpSys}}+2, {{bpSys}}]',
+                    borderColor: '#ef4444',
+                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                    tension: 0.4
+                }, {
+                    label: 'Diastolic',
+                    data: '[{{bpDia}}, {{bpDia}}-3, {{bpDia}}+1, {{bpDia}}]',
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        min: 60,
+                        max: 140
+                    }
+                }
+            }
+        });
+
+        // Heart Rate Variability Chart
+        const hrvCtx = document.getElementById('hrvChart').getContext('2d');
+        new Chart(hrvCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Rest Zone', 'Active Zone', 'Peak Zone'],
+                datasets: [{
+                    data: [60, 30, 10],
+                    backgroundColor: ['#10b981', '#f59e0b', '#ef4444'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
