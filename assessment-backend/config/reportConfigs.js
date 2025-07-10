@@ -31,27 +31,32 @@ module.exports = {
     // Dynamic Field Mappings
     fieldMappings: {
         // Patient Information
-        patientName: "name",
-        assessmentDate: "vitalsMap.entry_time",
+        patientName: "patientName",
+        entry_time: "vitalsMap.entry_time",
         gender: "gender",
         age: "bodyCompositionData.Age",
         height: "height",
         weight: "weight",
         sessionId: "session_id",
+        employee_id: "vitalsMap.employee_id",
         assessmentId: "assessment_id",
+        api_key: "vitalsMap.api_key",
         
         // Health Metrics
         healthScore: "accuracy",
+        assessmentScore: "accuracy",
         heartRate: "vitalsMap.vitals.heart_rate",
         respirationRate: "vitalsMap.vitals.resp_rate",
         bpSys: "vitalsMap.vitals.bp_sys",
         bpDia: "vitalsMap.vitals.bp_dia",
         oxygenSaturation: "vitalsMap.vitals.oxy_sat_prcnt",
+        wellnessScore: "vitalsMap.wellness_score",
+        riskScore: "vitalsMap.health_risk_score",
         healthRiskScore: "vitalsMap.health_risk_score",
         
         // Body Composition
         bmi: "bodyCompositionData.BMI",
-        bodyFat: "bodyCompositionData.BFC",
+        bodyFat: "vitalsMap.metadata.physiological_scores.bodyfat",
         leanMass: "bodyCompositionData.LM",
         fatMass: "bodyCompositionData.FM",
         bmr: "bodyCompositionData.BMR",
@@ -65,6 +70,12 @@ module.exports = {
         squatName: "exercises[?(@.id==259)].name",
         postureAnalysisFrontal: "exercises[?(@.id==73)].name",
         postureAnalysisSide: "exercises[?(@.id==74)].name",
+        postureFrontalScore: "exercises[?(@.id==73)].analysisScore",
+        postureSideScore: "exercises[?(@.id==74)].analysisScore",
+        postureFrontalAnalysis: "exercises[?(@.id==73)].analysisList",
+        postureSideAnalysis: "exercises[?(@.id==74)].analysisList",
+        postureFrontalTips: "exercises[?(@.id==73)].tipsList",
+        postureSideTips: "exercises[?(@.id==74)].tipsList",
         flexibilityTest: "exercises[?(@.id==281)].name",
         flexibilityDistance: "exercises[?(@.id==281)].setList[0].additionalFields[?(@.fieldName=='Distance')].fieldValue",
         

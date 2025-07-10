@@ -96,8 +96,23 @@ function processTemplate(template, sessionData, assessmentType = 'as_hr_02') {
     // Replace placeholders with actual values
     Object.entries(fieldValues).forEach(([fieldName, value]) => {
         const placeholder = new RegExp(`{{${fieldName}}}`, 'g');
-        processedTemplate = processedTemplate.replace(placeholder, value || 'N/A');
+        
+        // Format entry_time to show only the date
+        if (fieldName === 'entry_time' && value) {
+            // Extract only the date part (YYYY-MM-DD) from the timestamp
+            const dateOnly = value.split(' ')[0];
+            processedTemplate = processedTemplate.replace(placeholder, dateOnly || 'N/A');
+        } else {
+            processedTemplate = processedTemplate.replace(placeholder, value || 'N/A');
+        }
     });
+    
+    // Add health score status badge
+    const healthScoreValue = fieldValues.healthScore || fieldValues.assessmentScore;
+    if (healthScoreValue) {
+        const healthScoreStatusPlaceholder = new RegExp(`{{healthScore_status}}`, 'g');
+        processedTemplate = processedTemplate.replace(healthScoreStatusPlaceholder, generateStatusBadge('healthScore', healthScoreValue));
+    }
     
     // Generate dynamic metric bars and status badges
     const metricsWithBars = ['heartRate', 'respirationRate', 'bpSys', 'bpDia'];

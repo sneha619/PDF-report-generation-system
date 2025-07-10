@@ -10,9 +10,11 @@
             font-family: 'Inter', sans-serif; 
             margin: 0;
             padding: 0;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
         }
         .gradient-bg { 
-            background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 50%, #1e40af 100%);
+            background: linear-gradient(135deg, #2e4a97 0%, #3730a3 50%, #1e40af 100%);
         }
         .card-shadow { 
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); 
@@ -25,29 +27,68 @@
             border-radius: 4px;
             position: relative;
         }
+
         .metric-indicator {
-            position: absolute;
-            top: -2px;
             width: 12px;
             height: 12px;
-            background: #1f2937;
+            background: rgb(255, 255, 255);
             border-radius: 50%;
             border: 2px solid white;
+            position: absolute;
+            top: -2px;
+            transform: translateX(-50%);
         }
+
+        /* Page break controls */
+        .page-break-after {
+            page-break-after: always;
+            break-after: page;
+        }
+        .page-break-before {
+            page-break-before: always;
+            break-before: page;
+        }
+        .avoid-break {
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        /* Print-specific styles */
         @media print {
-            body { -webkit-print-color-adjust: exact; }
-            .gradient-bg { background: #1e3a8a !important; }
+            body { 
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .gradient-bg { 
+                background: #1e3a8a !important; 
+            }
+            .page-break-after {
+                page-break-after: always;
+                break-after: page;
+            }
+            .page-break-before {
+                page-break-before: always;
+                break-before: page;
+            }
+            .avoid-break {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+            .report-section {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
         }
     </style>
 </head>
-<body style="background: #f9fafb;">
+<body style="background: linear-gradient(135deg, #e0f2fe 0%, #bfdbfe 50%, #93c5fd 100%);">
     <!-- Header Section -->
     <div class="gradient-bg" style="color: white; padding: 2rem;">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem;">
             <div style="display: flex; align-items: center; gap: 1rem;">
                 <div style="display: flex; align-items: center; gap: 0.5rem;">
                     <svg width="32" height="32" viewBox="0 0 32 32" fill="currentColor">
-                        <path d="M16 2L20 10L28 10L22 16L24 24L16 20L8 24L10 16L4 10L12 10L16 2Z"/>
+                        <path d="M16,2 L20,10 L28,10 L22,16 L24,24 L16,20 L8,24 L10,16 L4,10 L12,10 L16,2 Z"/>
                     </svg>
                     <span style="font-size: 1.5rem; font-weight: 700;">Rootally</span>
                 </div>
@@ -68,7 +109,7 @@
                 <div style="font-size: 0.875rem; opacity: 0.9; margin-bottom: 0.25rem;">Name:</div>
                 <div style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">{{patientName}}</div>
                 <div style="font-size: 0.875rem; opacity: 0.9; margin-bottom: 0.25rem;">Date of assessment:</div>
-                <div style="font-weight: 500;">{assessmentDate}</div>
+                <div style="font-weight: 500;">{{entry_time}}</div>
             </div>
             <div style="text-align: center;">
                 <div style="font-size: 0.875rem; opacity: 0.9; margin-bottom: 0.25rem;">Gender:</div>
@@ -86,9 +127,9 @@
     </div>
 
     <!-- Main Content -->
-    <div style="padding: 2rem; background: #f9fafb;">
+    <div style="padding: 2rem; background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);">
         <!-- Health Score Section -->
-        <div style="background: white; border-radius: 0.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); padding: 1.5rem; margin-bottom: 2rem;">
+        <div class="report-section" style="background: linear-gradient(135deg, #ffffff 0%, #f3f4f6 100%); border-radius: 0.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); padding: 1.5rem; margin-bottom: 2rem;">
             <div style="display: flex; align-items: flex-start; gap: 1.5rem;">
                 <div style="flex: 1;">
                     <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
@@ -121,7 +162,7 @@
         </div>
 
         <!-- Key Body Vitals Section -->
-        <div style="background: white; border-radius: 0.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); padding: 1.5rem; margin-bottom: 2rem;">
+        <div class="report-section" style="background: linear-gradient(135deg, #ffffff 0%, #f3f4f6 100%); border-radius: 0.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); padding: 1.5rem; margin-bottom: 2rem;">
             <h2 style="font-size: 1.25rem; font-weight: 700; color: #1f2937; text-align: center; margin-bottom: 1.5rem;">Key Body Vitals</h2>
             
             <!-- Heart Rate -->
@@ -261,58 +302,744 @@
         </div>
 
         <!-- Exercise Results -->
-        <div style="background: white; border-radius: 0.75rem; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); padding: 2rem; margin-bottom: 2rem;">
+        <div id="exercisePerformanceSection" class="report-section avoid-break" style="background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%); border-radius: 0.75rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2); padding: 2rem; margin-bottom: 2rem; display: none;">
             <h2 style="font-size: 1.5rem; font-weight: 700; color: #1f2937; margin-bottom: 1.5rem;">Exercise Performance</h2>
             
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
                 <!-- Jog Test -->
-                <div style="background: #f8fafc; border-radius: 0.5rem; padding: 1.5rem; text-align: center;">
-                    <div style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">{{jogTestName}}</div>
-                    <div style="font-size: 2rem; font-weight: 700; color: #3b82f6; margin-bottom: 0.25rem;">{{jogTestTime}}</div>
-                    <div style="font-size: 0.875rem; color: #6b7280;">seconds</div>
+                <div id="jogTestContainer" style="background: linear-gradient(135deg, #dbeafe 0%, #93c5fd 100%); border-radius: 0.5rem; padding: 1.5rem; text-align: center; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.15); display: none;">
+                    <div style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem; border-bottom: 1px solid #bfdbfe; padding-bottom: 0.5rem;">{{jogTestName}}</div>
+                    <div id="jogTestTimeValue" style="display: none;">{{jogTestTime}}</div>
+                    <div id="jogTestTimeDisplay" style="font-size: 2rem; font-weight: 700; color: #3b82f6; margin-bottom: 0.5rem;">--</div>
+                    <div style="font-size: 0.875rem; color: #6b7280; background: #fff; border-radius: 0.375rem; padding: 0.5rem; display: inline-block; min-width: 60px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">seconds</div>
                 </div>
                 
                 <!-- Squat Test -->
-                <div style="background: #f0fdf4; border-radius: 0.5rem; padding: 1.5rem; text-align: center;">
-                    <div style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">{{squatTestName}}</div>
-                    <div style="font-size: 2rem; font-weight: 700; color: #059669; margin-bottom: 0.25rem;">{{squatReps}}</div>
-                    <div style="font-size: 0.875rem; color: #6b7280;">repetitions</div>
+                <div id="squatTestContainer" style="background: linear-gradient(135deg, #dcfce7 0%, #86efac 100%); border-radius: 0.5rem; padding: 1.5rem; text-align: center; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.15); display: none;">
+                    <div style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.75rem; border-bottom: 1px solid #bbf7d0; padding-bottom: 0.5rem;">{{squatName}}</div>
+                    <div id="squatRepsValue" style="display: none;">{{squatReps}}</div>
+                    <div id="squatRepsDisplay" style="font-size: 2rem; font-weight: 700; color: #059669; margin-bottom: 0.5rem;">--</div>
+                    <div style="font-size: 0.875rem; color: #6b7280; background: #fff; border-radius: 0.375rem; padding: 0.5rem; display: inline-block; min-width: 60px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">repetitions</div>
                 </div>
                 
-                <!-- Posture Analysis -->
-                <div style="background: #fef3c7; border-radius: 0.5rem; padding: 1.5rem; text-align: center;">
-                    <div style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Posture Analysis</div>
-                    <div style="font-size: 1.25rem; font-weight: 600; color: #d97706; margin-bottom: 0.25rem;">{{postureAnalysis}}</div>
-                    <div style="font-size: 0.875rem; color: #6b7280;">assessment</div>
+                <script>
+                    // Process jog test and squat test values
+                    document.addEventListener('DOMContentLoaded', function() {
+                        // Process jog test time
+                        const jogTestTimeElement = document.getElementById('jogTestTimeValue');
+                        const jogTestTimeDisplayElement = document.getElementById('jogTestTimeDisplay');
+                        
+                        if (jogTestTimeElement && jogTestTimeDisplayElement) {
+                            let jogTestValue = jogTestTimeElement.textContent;
+                            
+                            if (jogTestValue && jogTestValue.trim() !== 'N/A') {
+                                try {
+                                    // If it's a number, just display it
+                                    const numValue = parseFloat(jogTestValue);
+                                    if (!isNaN(numValue)) {
+                                        jogTestTimeDisplayElement.textContent = numValue;
+                                    } else {
+                                        // Try to parse as JSON
+                                        const jsonValue = JSON.parse(jogTestValue.replace(/&quot;/g, '"'));
+                                        if (typeof jsonValue === 'number') {
+                                            jogTestTimeDisplayElement.textContent = jsonValue;
+                                        } else if (typeof jsonValue === 'string') {
+                                            jogTestTimeDisplayElement.textContent = jsonValue;
+                                        } else {
+                                            jogTestTimeDisplayElement.textContent = 'Invalid format';
+                                        }
+                                    }
+                                } catch (e) {
+                                    // If not valid JSON, just display as is
+                                    jogTestTimeDisplayElement.textContent = jogTestValue;
+                                }
+                            } else {
+                                jogTestTimeDisplayElement.textContent = 'N/A';
+                            }
+                        }
+                        
+                        // Process squat reps
+                        const squatRepsElement = document.getElementById('squatRepsValue');
+                        const squatRepsDisplayElement = document.getElementById('squatRepsDisplay');
+                        
+                        if (squatRepsElement && squatRepsDisplayElement) {
+                            let squatRepsValue = squatRepsElement.textContent;
+                            
+                            if (squatRepsValue && squatRepsValue.trim() !== 'N/A') {
+                                try {
+                                    // If it's a number, just display it
+                                    const numValue = parseInt(squatRepsValue);
+                                    if (!isNaN(numValue)) {
+                                        squatRepsDisplayElement.textContent = numValue;
+                                    } else {
+                                        // Try to parse as JSON
+                                        const jsonValue = JSON.parse(squatRepsValue.replace(/&quot;/g, '"'));
+                                        if (typeof jsonValue === 'number') {
+                                            squatRepsDisplayElement.textContent = jsonValue;
+                                        } else if (typeof jsonValue === 'string') {
+                                            squatRepsDisplayElement.textContent = jsonValue;
+                                        } else {
+                                            squatRepsDisplayElement.textContent = 'Invalid format';
+                                        }
+                                    }
+                                } catch (e) {
+                                    // If not valid JSON, just display as is
+                                    squatRepsDisplayElement.textContent = squatRepsValue;
+                                }
+                            } else {
+                                squatRepsDisplayElement.textContent = 'N/A';
+                            }
+                        }
+                    });
+                </script>
+                
+            </div>
+        </div>
+
+        <!-- Page Break for Posture Analysis -->
+        <div class="page-break"></div>
+        
+        <!-- Posture Analysis Section (New Page) -->
+        <div class="report-section avoid-break" style="background: linear-gradient(135deg, #1e293b 0%, #334155 100%); border-radius: 0.75rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3); padding: 2rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; color: #f8fafc; margin-bottom: 1.5rem; text-align: center;">Posture Analysis</h2>
+            
+            <!-- Posture Analysis Content -->
+            <div style="background: linear-gradient(135deg, #334155 0%, #475569 100%); border-radius: 0.5rem; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">
+                <div style="font-size: 1.25rem; font-weight: 600; color: #f8fafc; margin-bottom: 1rem; text-align: center; border-bottom: 1px solid #64748b; padding-bottom: 0.5rem;">Posture Evaluation</div>
+                    
+                    <!-- Frontal View Section -->
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 1.5rem;">
+                        <!-- Left side: Analysis and Recommendations -->
+                        <div style="flex: 1; padding-right: 1rem;">
+                            <div id="postureFrontalAnalysis" style="display: none;">{{postureFrontalAnalysis}}</div>
+                            <div id="postureFrontalTips" style="display: none;">{{postureFrontalTips}}</div>
+                            
+                            <h4 style="font-size: 1rem; font-weight: 600; color: #38bdf8; margin-bottom: 0.5rem;">Analysis:</h4>
+                            <ul style="margin: 0 0 1rem 0; padding-left: 1.5rem; color: #e2e8f0; font-size: 0.875rem;" id="frontalAnalysisListContainer">
+                                <!-- Frontal analysis items will be populated dynamically -->
+                            </ul>
+                            
+                            <h4 style="font-size: 1rem; font-weight: 600; color: #38bdf8; margin-bottom: 0.5rem;">Recommendations:</h4>
+                            <ul style="margin: 0; padding-left: 1.5rem; color: #e2e8f0; font-size: 0.875rem;" id="frontalTipsListContainer">
+                                <!-- Frontal recommendation items will be populated dynamically -->
+                            </ul>
+                        </div>
+                        
+                        <!-- Right side: Score -->
+                        <div style="flex: 0.6; text-align: center; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 0.5rem; padding: 1rem; box-shadow: 0 1px 2px rgba(0,0,0,0.3);">
+                            <div style="font-size: 1.25rem; font-weight: 600; color: #38bdf8; margin-bottom: 0.75rem;">Frontal body view</div>
+                            <div style="font-size: 0.875rem; color: #94a3b8; margin-bottom: 0.5rem;">Frontal View Score:</div>
+                            <div id="postureFrontalScoreValue" style="display: none;">{{postureFrontalScore}}</div>
+                            <div id="postureFrontalScoreDisplay" style="font-size: 1.75rem; font-weight: 700; color: #60a5fa; margin-bottom: 0.5rem;">--</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Side View Section -->
+                    <div style="display: flex; justify-content: space-between;">
+                        <!-- Left side: Analysis and Recommendations -->
+                        <div style="flex: 1; padding-right: 1rem;">
+                            <div id="postureSideAnalysis" style="display: none;">{{postureSideAnalysis}}</div>
+                            <div id="postureSideTips" style="display: none;">{{postureSideTips}}</div>
+                            
+                            <h4 style="font-size: 1rem; font-weight: 600; color: #38bdf8; margin-bottom: 0.5rem;">Analysis:</h4>
+                            <ul style="margin: 0 0 1rem 0; padding-left: 1.5rem; color: #e2e8f0; font-size: 0.875rem;" id="sideAnalysisListContainer">
+                                <!-- Side analysis items will be populated dynamically -->
+                            </ul>
+                            
+                            <h4 style="font-size: 1rem; font-weight: 600; color: #38bdf8; margin-bottom: 0.5rem;">Recommendations:</h4>
+                            <ul style="margin: 0; padding-left: 1.5rem; color: #e2e8f0; font-size: 0.875rem;" id="sideTipsListContainer">
+                                <!-- Side recommendation items will be populated dynamically -->
+                            </ul>
+                        </div>
+                        
+                        <!-- Right side: Score -->
+                        <div style="flex: 0.6; text-align: center; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 0.5rem; padding: 1rem; box-shadow: 0 1px 2px rgba(0,0,0,0.3);">
+                            <div style="font-size: 1.25rem; font-weight: 600; color: #38bdf8; margin-bottom: 0.75rem;">Side body view</div>
+                            <div style="font-size: 0.875rem; color: #94a3b8; margin-bottom: 0.5rem;">Side View Score:</div>
+                            <div id="postureSideScoreValue" style="display: none;">{{postureSideScore}}</div>
+                            <div id="postureSideScoreDisplay" style="font-size: 1.75rem; font-weight: 700; color: #60a5fa; margin-bottom: 0.5rem;">--</div>
+                        </div>
+                    </div>
                 </div>
                 
-                <!-- Flexibility Test -->
-                <div style="background: #fdf2f8; border-radius: 0.5rem; padding: 1.5rem; text-align: center;">
-                    <div style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">{{flexibilityTestName}}</div>
-                    <div style="font-size: 2rem; font-weight: 700; color: #be185d; margin-bottom: 0.25rem;">{{flexibilityDistance}}</div>
-                    <div style="font-size: 0.875rem; color: #6b7280;">cm</div>
+                <script>
+                    // Parse JSON data and populate analysis and recommendations lists
+                    document.addEventListener('DOMContentLoaded', function() {
+                        try {
+                            // Get all elements
+                            const frontalAnalysisElement = document.getElementById('postureFrontalAnalysis');
+                            const sideAnalysisElement = document.getElementById('postureSideAnalysis');
+                            const frontalTipsElement = document.getElementById('postureFrontalTips');
+                            const sideTipsElement = document.getElementById('postureSideTips');
+                            const postureFrontalScoreValue = document.getElementById('postureFrontalScoreValue');
+                            const postureFrontalScoreDisplay = document.getElementById('postureFrontalScoreDisplay');
+                            const postureSideScoreValue = document.getElementById('postureSideScoreValue');
+                            const postureSideScoreDisplay = document.getElementById('postureSideScoreDisplay');
+                            
+                            // Process frontal score
+                            if (postureFrontalScoreValue && postureFrontalScoreDisplay) {
+                                let frontalScoreValue = postureFrontalScoreValue.textContent;
+                                
+                                if (frontalScoreValue && frontalScoreValue.trim() !== 'N/A') {
+                                    try {
+                                        // If it's a number, just display it
+                                        const numValue = parseFloat(frontalScoreValue);
+                                        if (!isNaN(numValue)) {
+                                            postureFrontalScoreDisplay.textContent = numValue.toFixed(0);
+                                        } else {
+                                            // Try to parse as JSON
+                                            const jsonValue = JSON.parse(frontalScoreValue.replace(/&quot;/g, '"'));
+                                            if (typeof jsonValue === 'number') {
+                                                postureFrontalScoreDisplay.textContent = jsonValue.toFixed(0);
+                                            } else if (typeof jsonValue === 'string') {
+                                                postureFrontalScoreDisplay.textContent = jsonValue;
+                                            } else {
+                                                postureFrontalScoreDisplay.textContent = 'Invalid format';
+                                            }
+                                        }
+                                    } catch (e) {
+                                        // If not valid JSON, just display as is
+                                        postureFrontalScoreDisplay.textContent = frontalScoreValue;
+                                    }
+                                } else {
+                                    postureFrontalScoreDisplay.textContent = 'N/A';
+                                }
+                            }
+                            
+                            // Process side score
+                            if (postureSideScoreValue && postureSideScoreDisplay) {
+                                let sideScoreValue = postureSideScoreValue.textContent;
+                                
+                                if (sideScoreValue && sideScoreValue.trim() !== 'N/A') {
+                                    try {
+                                        // If it's a number, just display it
+                                        const numValue = parseFloat(sideScoreValue);
+                                        if (!isNaN(numValue)) {
+                                            postureSideScoreDisplay.textContent = numValue.toFixed(0);
+                                        } else {
+                                            // Try to parse as JSON
+                                            const jsonValue = JSON.parse(sideScoreValue.replace(/&quot;/g, '"'));
+                                            if (typeof jsonValue === 'number') {
+                                                postureSideScoreDisplay.textContent = jsonValue.toFixed(0);
+                                            } else if (typeof jsonValue === 'string') {
+                                                postureSideScoreDisplay.textContent = jsonValue;
+                                            } else {
+                                                postureSideScoreDisplay.textContent = 'Invalid format';
+                                            }
+                                        }
+                                    } catch (e) {
+                                        // If not valid JSON, just display as is
+                                        postureSideScoreDisplay.textContent = sideScoreValue;
+                                    }
+                                } else {
+                                    postureSideScoreDisplay.textContent = 'N/A';
+                                }
+                            }
+                            
+                            // Parse analysis data
+                            let frontalAnalysis = [];
+                            let sideAnalysis = [];
+                            
+                            if (frontalAnalysisElement && frontalAnalysisElement.textContent) {
+                                try {
+                                    // First try to parse as JSON
+                                    const content = frontalAnalysisElement.textContent.replace(/&quot;/g, '"');
+                                    try {
+                                        frontalAnalysis = JSON.parse(content);
+                                    } catch (jsonError) {
+                                        // If JSON parsing fails, check if it's a string representation of an array
+                                        if (content.startsWith('[') && content.endsWith(']')) {
+                                            // Try to evaluate it as an array (safer than eval)
+                                            try {
+                                                frontalAnalysis = JSON.parse(content);
+                                            } catch (e) {
+                                                // If that fails too, fall back to comma splitting
+                                                frontalAnalysis = content.split(',').map(item => {
+                                                    return item.replace(/[\[\]"]/g, '').trim();
+                                                });
+                                            }
+                                        } else {
+                                            // Not JSON or array notation, treat as comma-separated
+                                            frontalAnalysis = content.split(',').map(item => item.trim());
+                                        }
+                                    }
+                                } catch (e) {
+                                    console.error('Error parsing frontal analysis:', e);
+                                    // Default to empty array if all parsing fails
+                                    frontalAnalysis = [];
+                                }
+                            }
+                            
+                            if (sideAnalysisElement && sideAnalysisElement.textContent) {
+                                try {
+                                    // First try to parse as JSON
+                                    const content = sideAnalysisElement.textContent.replace(/&quot;/g, '"');
+                                    try {
+                                        sideAnalysis = JSON.parse(content);
+                                    } catch (jsonError) {
+                                        // If JSON parsing fails, check if it's a string representation of an array
+                                        if (content.startsWith('[') && content.endsWith(']')) {
+                                            // Try to evaluate it as an array (safer than eval)
+                                            try {
+                                                sideAnalysis = JSON.parse(content);
+                                            } catch (e) {
+                                                // If that fails too, fall back to comma splitting
+                                                sideAnalysis = content.split(',').map(item => {
+                                                    return item.replace(/[\[\]"]/g, '').trim();
+                                                });
+                                            }
+                                        } else {
+                                            // Not JSON or array notation, treat as comma-separated
+                                            sideAnalysis = content.split(',').map(item => item.trim());
+                                        }
+                                    }
+                                } catch (e) {
+                                    console.error('Error parsing side analysis:', e);
+                                    // Default to empty array if all parsing fails
+                                    sideAnalysis = [];
+                                }
+                            }
+                            
+                            // Parse tips data with improved parsing
+                            let frontalTips = [];
+                            let sideTips = [];
+                            
+                            if (frontalTipsElement && frontalTipsElement.textContent) {
+                                try {
+                                    // First try to parse as JSON
+                                    const content = frontalTipsElement.textContent.replace(/&quot;/g, '"');
+                                    try {
+                                        frontalTips = JSON.parse(content);
+                                    } catch (jsonError) {
+                                        // If JSON parsing fails, check if it's a string representation of an array
+                                        if (content.startsWith('[') && content.endsWith(']')) {
+                                            // Try to evaluate it as an array (safer than eval)
+                                            try {
+                                                frontalTips = JSON.parse(content);
+                                            } catch (e) {
+                                                // If that fails too, fall back to comma splitting
+                                                frontalTips = content.split(',').map(item => {
+                                                    return item.replace(/[\[\]"]/g, '').trim();
+                                                });
+                                            }
+                                        } else {
+                                            // Not JSON or array notation, treat as comma-separated
+                                            frontalTips = content.split(',').map(item => item.trim());
+                                        }
+                                    }
+                                } catch (e) {
+                                    console.error('Error parsing frontal tips:', e);
+                                    // Default to empty array if all parsing fails
+                                    frontalTips = [];
+                                }
+                            }
+                            
+                            if (sideTipsElement && sideTipsElement.textContent) {
+                                try {
+                                    // First try to parse as JSON
+                                    const content = sideTipsElement.textContent.replace(/&quot;/g, '"');
+                                    try {
+                                        sideTips = JSON.parse(content);
+                                    } catch (jsonError) {
+                                        // If JSON parsing fails, check if it's a string representation of an array
+                                        if (content.startsWith('[') && content.endsWith(']')) {
+                                            // Try to evaluate it as an array (safer than eval)
+                                            try {
+                                                sideTips = JSON.parse(content);
+                                            } catch (e) {
+                                                // If that fails too, fall back to comma splitting
+                                                sideTips = content.split(',').map(item => {
+                                                    return item.replace(/[\[\]"]/g, '').trim();
+                                                });
+                                            }
+                                        } else {
+                                            // Not JSON or array notation, treat as comma-separated
+                                            sideTips = content.split(',').map(item => item.trim());
+                                        }
+                                    }
+                                } catch (e) {
+                                    console.error('Error parsing side tips:', e);
+                                    // Default to empty array if all parsing fails
+                                    sideTips = [];
+                                }
+                            }
+                            
+                            // Helper function to safely populate list containers
+                            function populateListContainer(containerId, items) {
+                                const container = document.getElementById(containerId);
+                                if (!container) return;
+                                
+                                // Clear existing content
+                                container.innerHTML = '';
+                                
+                                // Handle empty or invalid data
+                                if (!items || !Array.isArray(items) || items.length === 0) {
+                                    const li = document.createElement('li');
+                                    li.textContent = 'No data available';
+                                    li.style.fontStyle = 'italic';
+                                    li.style.color = '#6b7280';
+                                    container.appendChild(li);
+                                    return;
+                                }
+                                
+                                // Add items to the list
+                                items.forEach(item => {
+                                    if (item && (typeof item === 'string' || typeof item === 'number')) {
+                                        const li = document.createElement('li');
+                                        li.textContent = String(item).trim();
+                                        container.appendChild(li);
+                                    }
+                                });
+                                
+                                // If no valid items were added, show a message
+                                if (container.children.length === 0) {
+                                    const li = document.createElement('li');
+                                    li.textContent = 'No valid data available';
+                                    li.style.fontStyle = 'italic';
+                                    li.style.color = '#6b7280';
+                                    container.appendChild(li);
+                                }
+                            }
+                            
+                            // Populate all list containers
+                            populateListContainer('frontalAnalysisListContainer', frontalAnalysis);
+                            populateListContainer('sideAnalysisListContainer', sideAnalysis);
+                            populateListContainer('frontalTipsListContainer', frontalTips);
+                            populateListContainer('sideTipsListContainer', sideTips);
+                            
+                            // Log for debugging
+                            console.log('Posture data processed:', {
+                                frontalAnalysis,
+                                sideAnalysis,
+                                frontalTips,
+                                sideTips,
+                                frontalScore: postureFrontalScoreDisplay.textContent,
+                                sideScore: postureSideScoreDisplay.textContent
+                            });
+                            
+                            // Add a fallback for empty containers
+                            document.querySelectorAll('#frontalAnalysisListContainer, #sideAnalysisListContainer, #frontalTipsListContainer, #sideTipsListContainer').forEach(container => {
+                                if (container.children.length === 0) {
+                                    const li = document.createElement('li');
+                                    li.textContent = 'No data available';
+                                    li.style.fontStyle = 'italic';
+                                    li.style.color = '#6b7280';
+                                    container.appendChild(li);
+                                }
+                            });
+                        } catch (error) {
+                            console.error('Error processing posture data:', error);
+                        }
+                    });
+                </script>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const jogTestTimeElement = document.getElementById('jogTestTimeValue');
+                        const jogTestTimeDisplayElement = document.getElementById('jogTestTimeDisplay');
+                        const squatRepsElement = document.getElementById('squatRepsValue');
+                        const squatRepsDisplayElement = document.getElementById('squatRepsDisplay');
+                        const jogTestContainer = document.getElementById('jogTestContainer');
+                        const squatTestContainer = document.getElementById('squatTestContainer');
+                        const exercisePerformanceSection = document.getElementById('exercisePerformanceSection');
+                        
+                        let hasExerciseData = false;
+                        
+                        // Process jog test time
+                        if (jogTestTimeElement && jogTestTimeDisplayElement && jogTestContainer) {
+                            let timeValue = jogTestTimeElement.textContent;
+                            if (timeValue && timeValue.trim() !== '' && timeValue.trim().toLowerCase() !== 'n/a') {
+                                try {
+                                    const numValue = parseFloat(timeValue);
+                                    if (!isNaN(numValue)) {
+                                        jogTestTimeDisplayElement.textContent = numValue.toFixed(2);
+                                        jogTestContainer.style.display = 'block';
+                                        hasExerciseData = true;
+                                    } else {
+                                        // Try to parse as JSON
+                                        try {
+                                            const jsonValue = JSON.parse(timeValue.replace(/&quot;/g, '"'));
+                                            if (typeof jsonValue === 'number' || (typeof jsonValue === 'string' && jsonValue.trim() !== '' && jsonValue.toLowerCase() !== 'n/a')) {
+                                                jogTestTimeDisplayElement.textContent = typeof jsonValue === 'number' ? jsonValue.toFixed(2) : jsonValue;
+                                                jogTestContainer.style.display = 'block';
+                                                hasExerciseData = true;
+                                            }
+                                        } catch (jsonError) {
+                                            // If it's a valid non-empty string that's not 'N/A', show it
+                                            jogTestTimeDisplayElement.textContent = timeValue;
+                                            jogTestContainer.style.display = 'block';
+                                            hasExerciseData = true;
+                                        }
+                                    }
+                                } catch (e) {
+                                    // If parsing fails but it's a valid string, show it
+                                    jogTestTimeDisplayElement.textContent = timeValue;
+                                    jogTestContainer.style.display = 'block';
+                                    hasExerciseData = true;
+                                }
+                            }
+                        }
+                        
+                        // Process squat reps
+                        if (squatRepsElement && squatRepsDisplayElement && squatTestContainer) {
+                            let repsValue = squatRepsElement.textContent;
+                            if (repsValue && repsValue.trim() !== '' && repsValue.trim().toLowerCase() !== 'n/a') {
+                                try {
+                                    const numValue = parseInt(repsValue);
+                                    if (!isNaN(numValue)) {
+                                        squatRepsDisplayElement.textContent = numValue;
+                                        squatTestContainer.style.display = 'block';
+                                        hasExerciseData = true;
+                                    } else {
+                                        // Try to parse as JSON
+                                        try {
+                                            const jsonValue = JSON.parse(repsValue.replace(/&quot;/g, '"'));
+                                            if (typeof jsonValue === 'number' || (typeof jsonValue === 'string' && jsonValue.trim() !== '' && jsonValue.toLowerCase() !== 'n/a')) {
+                                                squatRepsDisplayElement.textContent = jsonValue;
+                                                squatTestContainer.style.display = 'block';
+                                                hasExerciseData = true;
+                                            }
+                                        } catch (jsonError) {
+                                            // If it's a valid non-empty string that's not 'N/A', show it
+                                            squatRepsDisplayElement.textContent = repsValue;
+                                            squatTestContainer.style.display = 'block';
+                                            hasExerciseData = true;
+                                        }
+                                    }
+                                } catch (e) {
+                                    // If parsing fails but it's a valid string, show it
+                                    squatRepsDisplayElement.textContent = repsValue;
+                                    squatTestContainer.style.display = 'block';
+                                    hasExerciseData = true;
+                                }
+                            }
+                        }
+                        
+                        // Show the exercise performance section only if we have data
+                        if (hasExerciseData && exercisePerformanceSection) {
+                            exercisePerformanceSection.style.display = 'block';
+                        }
+                    });
+                </script>
+                
+                <!-- Flexibility Test (Stand and Reach) -->
+                <div id="flexibilityTestContainer" style="display: none;">
+    <div style="background: linear-gradient(135deg, #fdf2f8 0%, #fbcfe8 100%); border-radius: 0.5rem; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                    <div style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem; text-align: center; border-bottom: 1px solid #f9a8d4; padding-bottom: 0.5rem;">Stand and Reach</div>
+                    
+                    <div style="display: flex; justify-content: center; align-items: center;">
+                        <div style="flex: 0.8; text-align: center; background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%); border-radius: 0.5rem; padding: 1.5rem; box-shadow: 0 1px 2px rgba(0,0,0,0.1);">
+                            <div id="flexibilityDistanceValue" style="display: none;">{{flexibilityDistance}}</div>
+                            <div id="flexibilityDisplay" style="font-size: 2.5rem; font-weight: 700; color: #be185d; margin-bottom: 0.5rem;">--</div>
+                            <div style="font-size: 0.875rem; color: #6b7280; background: #fff; border-radius: 0.375rem; padding: 0.5rem; display: inline-block; min-width: 60px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">cm</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <script>
+                    // Process flexibility distance value
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const flexibilityDistanceElement = document.getElementById('flexibilityDistanceValue');
+                        const flexibilityDisplayElement = document.getElementById('flexibilityDisplay');
+                        const flexibilityTestContainer = document.getElementById('flexibilityTestContainer');
+                        
+                        if (flexibilityDistanceElement && flexibilityDisplayElement && flexibilityTestContainer) {
+                            let flexibilityValue = flexibilityDistanceElement.textContent;
+                            
+                            // Try to parse as JSON if it looks like JSON
+                            if (flexibilityValue && flexibilityValue.trim() !== '' && flexibilityValue.trim().toLowerCase() !== 'n/a') {
+                                try {
+                                    // If it's a number, just display it
+                                    const numValue = parseFloat(flexibilityValue);
+                                    if (!isNaN(numValue)) {
+                                        flexibilityTestContainer.style.display = 'block';
+                                        flexibilityDisplayElement.textContent = numValue.toFixed(2);
+                                        flexibilityTestContainer.style.display = 'block';
+                                    } else {
+                                        // Try to parse as JSON
+                                        try {
+                                            const jsonValue = JSON.parse(flexibilityValue.replace(/&quot;/g, '"'));
+                                            if (typeof jsonValue === 'number') {
+                                                flexibilityDisplayElement.textContent = jsonValue.toFixed(2);
+                                                flexibilityTestContainer.style.display = 'block';
+                                            } else if (typeof jsonValue === 'string' && jsonValue.trim() !== '' && jsonValue.toLowerCase() !== 'n/a') {
+                                                flexibilityDisplayElement.textContent = jsonValue;
+                                                flexibilityTestContainer.style.display = 'block';
+                                            }
+                                        } catch (jsonError) {
+                                            // If it's a valid non-empty string that's not 'N/A', show it
+                                            if (flexibilityValue.trim() !== '' && flexibilityValue.toLowerCase() !== 'n/a') {
+                                                flexibilityDisplayElement.textContent = flexibilityValue;
+                                                flexibilityTestContainer.style.display = 'block';
+                                            }
+                                        }
+                                    }
+                                } catch (e) {
+                                    // If parsing fails but it's a valid string, show it
+                                    if (flexibilityValue.trim() !== '' && flexibilityValue.toLowerCase() !== 'n/a') {
+                                        flexibilityDisplayElement.textContent = flexibilityValue;
+                                        flexibilityTestContainer.style.display = 'block';
+                                    }
+                                }
+                            }
+                        }
+                    });
+                </script>
+            </div>
+        </div>
+
+        <!-- Advanced Metrics -->
+        <div class="report-section avoid-break" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); border-radius: 0.75rem; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); padding: 2rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; color: #1f2937; margin-bottom: 1.5rem;">Advanced Health Metrics</h2>
+            
+            <!-- Physiological Scores from data.js (lines 250-264) -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+                <!-- VO2 Max -->
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 0.5rem; padding: 1.5rem; text-align: center; color: white;">
+                    <div style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">VO2 Max</div>
+                    <div style="font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem;">{{vo2Max}}</div>
+                    <div style="font-size: 0.875rem; opacity: 0.9;">ml/kg/min</div>
+                </div>
+                
+                <!-- Stress Index -->
+                <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 0.5rem; padding: 1.5rem; text-align: center; color: white;">
+                    <div style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Stress Index</div>
+                    <div style="font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem;">{{stressIndex}}</div>
+                    <div style="font-size: 0.875rem; opacity: 0.9;">units</div>
+                </div>
+                
+                <!-- HRV -->
+                <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); border-radius: 0.5rem; padding: 1.5rem; text-align: center; color: white;">
+                    <div style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">HRV</div>
+                    <div style="font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem;">{{heartRateVariability}}</div>
+                    <div style="font-size: 0.875rem; opacity: 0.9;">ms</div>
+                </div>
+                
+                <!-- Cardiac Output -->
+                <div style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); border-radius: 0.5rem; padding: 1.5rem; text-align: center; color: white;">
+                    <div style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Cardiac Output</div>
+                    <div style="font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem;">{{cardiacOutput}}</div>
+                    <div style="font-size: 0.875rem; opacity: 0.9;">L/min</div>
+                </div>
+                
+                <!-- Blood Volume -->
+                <div style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); border-radius: 0.5rem; padding: 1.5rem; text-align: center; color: #1f2937;">
+                    <div style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Blood Volume</div>
+                    <div style="font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem;">{{bloodVolume}}</div>
+                    <div style="font-size: 0.875rem; opacity: 0.8;">L</div>
+                </div>
+                
+                <!-- Total Body Water -->
+                <div style="background: linear-gradient(135deg, #d299c2 0%, #fef9d7 100%); border-radius: 0.5rem; padding: 1.5rem; text-align: center; color: #1f2937;">
+                    <div style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Total Body Water</div>
+                    <div style="font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem;">{{totalBodyWater}}</div>
+                    <div style="font-size: 0.875rem; opacity: 0.8;">L</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Glucose & Diabetes Metrics -->
+        <div class="report-section avoid-break" style="background: linear-gradient(135deg, #f9fafb 0%, #e5e7eb 100%); border-radius: 0.75rem; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); padding: 2rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; color: #1f2937; margin-bottom: 1.5rem;">Glucose & Diabetes Assessment</h2>
+            
+            <!-- Tips from data.js (lines 97-104) -->
+            <div style="margin-bottom: 1.5rem; background: #f0f9ff; border-radius: 0.5rem; padding: 1rem;">
+                <h3 style="font-size: 1rem; font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Recommended Tips:</h3>
+                <ul style="margin: 0; padding-left: 1.5rem; color: #4b5563;">
+                    <li>Engage in neck strengthening exercises.</li>
+                    <li>Consciously practice standing with straight knees.</li>
+                </ul>
+                <div style="margin-top: 0.75rem; font-size: 0.875rem; color: #6b7280;">
+                    <p>Total Reps: 1</p>
+                    <p>Total Sets: 1</p>
+                </div>
+            </div>
+            
+            <!-- Physiological Data from data.js (lines 250-264) -->
+            <div style="margin-bottom: 1.5rem; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); border-radius: 0.5rem; padding: 1rem;">
+                <h3 style="font-size: 1rem; font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Physiological Data</h3>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem;">
+                    <div style="background: rgba(255, 255, 255, 0.7); padding: 0.75rem; border-radius: 0.25rem;">
+                        <span style="font-weight: 600; color: #4b5563;">BMI:</span> <span>{{bmi}}</span>
+                    </div>
+                    <div style="background: rgba(255, 255, 255, 0.7); padding: 0.75rem; border-radius: 0.25rem;">
+                        <span style="font-weight: 600; color: #4b5563;">Body Fat:</span> <span>{{bodyFat}}%</span>
+                    </div>
+                    <div style="background: rgba(255, 255, 255, 0.7); padding: 0.75rem; border-radius: 0.25rem;">
+                        <span style="font-weight: 600; color: #4b5563;">Height:</span> <span>{{height}} cm</span>
+                    </div>
+                    <div style="background: rgba(255, 255, 255, 0.7); padding: 0.75rem; border-radius: 0.25rem;">
+                        <span style="font-weight: 600; color: #4b5563;">Weight:</span> <span>{{weight}} kg</span>
+                    </div>
+                    <div style="background: rgba(255, 255, 255, 0.7); padding: 0.75rem; border-radius: 0.25rem;">
+                        <span style="font-weight: 600; color: #4b5563;">Gender:</span> <span>{{gender}}</span>
+                    </div>
+                    <div style="background: rgba(255, 255, 255, 0.7); padding: 0.75rem; border-radius: 0.25rem;">
+                        <span style="font-weight: 600; color: #4b5563;">Intensity:</span> <span>Hard</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                <!-- HbA1c -->
+                <div style="background: #fef7ff; border: 2px solid #e879f9; border-radius: 0.5rem; padding: 1.5rem; text-align: center;">
+                    <div style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">HbA1c Level</div>
+                    <div style="font-size: 2rem; font-weight: 700; color: #c026d3; margin-bottom: 0.25rem;">{{hba1c}}%</div>
+                    <div style="font-size: 0.875rem; color: #6b7280;">3-month average</div>
+                </div>
+                
+                <!-- Diabetes Control Score -->
+                <div style="background: #f0f9ff; border: 2px solid #38bdf8; border-radius: 0.5rem; padding: 1.5rem; text-align: center;">
+                    <div style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">Diabetes Control</div>
+                    <div style="font-size: 2rem; font-weight: 700; color: #0284c7; margin-bottom: 0.25rem;">{{diabetesControlScore}}</div>
+                    <div style="font-size: 0.875rem; color: #6b7280;">control score</div>
                 </div>
             </div>
         </div>
 
         <!-- Body Composition Analysis -->
-        <div style="background: white; border-radius: 0.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); padding: 1.5rem;">
-            <h2 style="font-size: 1.25rem; font-weight: 700; color: #1f2937; margin-bottom: 1.5rem;">Body Composition Analysis</h2>
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;">
-                <div style="text-align: center; padding: 1rem; background: #f8fafc; border-radius: 0.5rem;">
-                    <div style="font-size: 1.5rem; font-weight: 700; color: #2563eb; margin-bottom: 0.25rem;">{{bmi}}</div>
+        <div class="report-section avoid-break" style="background: linear-gradient(135deg, #f9fafb 0%, #e5e7eb 100%); border-radius: 0.75rem; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); padding: 2rem; margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; color: #1f2937; margin-bottom: 1.5rem;">Body Composition Analysis</h2>
+            
+            <!-- Primary Metrics -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                <div style="text-align: center; padding: 1.5rem; background: #f0f9ff; border-radius: 0.5rem; border: 2px solid #3b82f6;">
+                    <div style="font-size: 2rem; font-weight: 700; color: #2563eb; margin-bottom: 0.25rem;">{{bmi}}</div>
                     <div style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.5rem;">BMI</div>
                     <div style="font-size: 0.75rem; color: #10b981;">Normal Range</div>
                 </div>
-                <div style="text-align: center; padding: 1rem; background: #f8fafc; border-radius: 0.5rem;">
-                    <div style="font-size: 1.5rem; font-weight: 700; color: #10b981; margin-bottom: 0.25rem;">{{bodyFat}}%</div>
+                <div style="text-align: center; padding: 1.5rem; background: #f0fdf4; border-radius: 0.5rem; border: 2px solid #10b981;">
+                    <div style="font-size: 2rem; font-weight: 700; color: #10b981; margin-bottom: 0.25rem;">{{bodyFat}}%</div>
                     <div style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.5rem;">Body Fat</div>
                     <div style="font-size: 0.75rem; color: #10b981;">Healthy</div>
                 </div>
-                <div style="text-align: center; padding: 1rem; background: #f8fafc; border-radius: 0.5rem;">
-                    <div style="font-size: 1.5rem; font-weight: 700; color: #7c3aed; margin-bottom: 0.25rem;">{{wellnessScore}}</div>
+                <div style="text-align: center; padding: 1.5rem; background: #faf5ff; border-radius: 0.5rem; border: 2px solid #7c3aed;">
+                    <div style="font-size: 2rem; font-weight: 700; color: #7c3aed; margin-bottom: 0.25rem;">{{wellnessScore}}</div>
                     <div style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.5rem;">Wellness Score</div>
                     <div style="font-size: 0.75rem; color: #10b981;">Excellent</div>
+                </div>
+            </div>
+            
+            <!-- Detailed Composition -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem;">
+                <div style="text-align: center; padding: 1rem; background: #fef3c7; border-radius: 0.5rem;">
+                    <div style="font-size: 1.25rem; font-weight: 700; color: #d97706; margin-bottom: 0.25rem;">{{leanMass}} kg</div>
+                    <div style="font-size: 0.75rem; color: #6b7280;">Lean Mass</div>
+                </div>
+                <div style="text-align: center; padding: 1rem; background: #fef2f2; border-radius: 0.5rem;">
+                    <div style="font-size: 1.25rem; font-weight: 700; color: #dc2626; margin-bottom: 0.25rem;">{{fatMass}} kg</div>
+                    <div style="font-size: 0.75rem; color: #6b7280;">Fat Mass</div>
+                </div>
+                <div style="text-align: center; padding: 1rem; background: #ecfdf5; border-radius: 0.5rem;">
+                    <div style="font-size: 1.25rem; font-weight: 700; color: #059669; margin-bottom: 0.25rem;">{{bmr}} kcal</div>
+                    <div style="font-size: 0.75rem; color: #6b7280;">BMR</div>
+                </div>
+                <div style="text-align: center; padding: 1rem; background: #f3e8ff; border-radius: 0.5rem;">
+                    <div style="font-size: 1.25rem; font-weight: 700; color: #9333ea; margin-bottom: 0.25rem;">{{metabolicAge}} years</div>
+                    <div style="font-size: 0.75rem; color: #6b7280;">Metabolic Age</div>
+                </div>
+                <div style="text-align: center; padding: 1rem; background: #fdf4ff; border-radius: 0.5rem;">
+                    <div style="font-size: 1.25rem; font-weight: 700; color: #c026d3; margin-bottom: 0.25rem;">{{whr}}</div>
+                    <div style="font-size: 0.75rem; color: #6b7280;">WHR</div>
                 </div>
             </div>
         </div>

@@ -11,9 +11,29 @@ module.exports = async function generatePDF(htmlContent, filename) {
   
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
-  await page.setContent(htmlContent);
+  
+  // Set viewport to ensure proper rendering
+  await page.setViewport({ width: 1200, height: 1600 });
+  
+  // Set content with proper waiting for network and rendering
+  await page.setContent(htmlContent, { waitUntil: 'networkidle0' });
+  
   const pdfPath = path.join(reportsDir, filename);
-  await page.pdf({ path: pdfPath, format: "A4" });
+  
+  // Enhanced PDF options to prevent content splitting across pages
+  await page.pdf({
+    path: pdfPath,
+    format: "A4",
+    printBackground: true,
+    margin: {
+      top: "20px",
+      right: "20px",
+      bottom: "20px",
+      left: "20px"
+    },
+    preferCSSPageSize: true
+  });
+  
   await browser.close();
   
   return pdfPath;

@@ -3,12 +3,13 @@ module.exports = [
     // Health & Fitness Assessment (as_hr_02)
     {
         "session_id": "session_001",
-        "accuracy": 50,
+        "patientName" : "John Doe",
+        "accuracy": 70,
         "assessmentResultId": "-OK76ANqAq9pvKSl3ZoN",
         "assessment_id": "as_hr_02",
         "bodyCompositionData": {
             "AGR": "1.687",
-            "Age": "43",
+            "Age": "33",
             "BFC": "29.754",
             "BMI": "33.145",
             "BMR": "2054.217",
@@ -282,6 +283,7 @@ module.exports = [
     // Cardiac Assessment (as_card_01)
     {
         "session_id": "session_002",
+        "patientName" : "Rose Smith",
         "accuracy": 75,
         "assessmentResultId": "-OK76ANqAq9pvKSl3ZoP",
         "assessment_id": "as_card_01",
