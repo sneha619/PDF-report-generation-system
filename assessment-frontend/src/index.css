@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-['Inter',_-apple-system,_BlinkMacSystemFont,_'Segoe_UI',_'Roboto',_'Oxygen',_'Ubuntu',_'Cantarell',_'Fira_Sans',_'Droid_Sans',_'Helvetica_Neue',_sans-serif] antialiased bg-gray-50;
+  }
+  
+  code {
+    @apply font-['source-code-pro',_Menlo,_Monaco,_Consolas,_'Courier_New',_monospace];
+  }
+}
+
+@layer components {
+  .gradient-bg { 
+    @apply bg-gradient-to-br from-blue-800 via-indigo-800 to-blue-900;
+  }
+
+  .card-shadow { 
+    @apply shadow-md;
+  }
+
+  .status-good { @apply bg-emerald-500 text-white; }
+  .status-normal { @apply bg-blue-500 text-white; }
+  .status-warning { @apply bg-amber-500 text-white; }
+  .status-danger { @apply bg-red-500 text-white; }
+}

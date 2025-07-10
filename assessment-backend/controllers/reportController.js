@@ -58,7 +58,8 @@ exports.getAssessmentTypes = (req, res) => {
       sections: config.sections
     }));
     
-    res.json({ success: true, assessmentTypes: types });
+    // Return just the array of types for frontend compatibility
+    res.json(types);
   } catch (error) {
     console.error('Error getting assessment types:', error);
     res.status(500).json({ error: 'Failed to get assessment types' });
