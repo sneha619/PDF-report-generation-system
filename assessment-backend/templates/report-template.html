@@ -408,21 +408,25 @@
                 <div style="font-size: 1.25rem; font-weight: 600; color: #f8fafc; margin-bottom: 1rem; text-align: center; border-bottom: 1px solid #64748b; padding-bottom: 0.5rem;">Posture Evaluation</div>
                     
                     <!-- Frontal View Section -->
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 1.5rem;">
+                    <div id="frontalViewSection" style="display: none; justify-content: space-between; margin-bottom: 1.5rem;">
                         <!-- Left side: Analysis and Recommendations -->
                         <div style="flex: 1; padding-right: 1rem;">
                             <div id="postureFrontalAnalysis" style="display: none;">{{postureFrontalAnalysis}}</div>
                             <div id="postureFrontalTips" style="display: none;">{{postureFrontalTips}}</div>
                             
-                            <h4 style="font-size: 1rem; font-weight: 600; color: #38bdf8; margin-bottom: 0.5rem;">Analysis:</h4>
-                            <ul style="margin: 0 0 1rem 0; padding-left: 1.5rem; color: #e2e8f0; font-size: 0.875rem;" id="frontalAnalysisListContainer">
-                                <!-- Frontal analysis items will be populated dynamically -->
-                            </ul>
+                            <div id="frontalAnalysisSection" style="display: none;">
+                                <h4 style="font-size: 1rem; font-weight: 600; color: #38bdf8; margin-bottom: 0.5rem;">Analysis:</h4>
+                                <ul style="margin: 0 0 1rem 0; padding-left: 1.5rem; color: #e2e8f0; font-size: 0.875rem;" id="frontalAnalysisListContainer">
+                                    <!-- Frontal analysis items will be populated dynamically -->
+                                </ul>
+                            </div>
                             
-                            <h4 style="font-size: 1rem; font-weight: 600; color: #38bdf8; margin-bottom: 0.5rem;">Recommendations:</h4>
-                            <ul style="margin: 0; padding-left: 1.5rem; color: #e2e8f0; font-size: 0.875rem;" id="frontalTipsListContainer">
-                                <!-- Frontal recommendation items will be populated dynamically -->
-                            </ul>
+                            <div id="frontalTipsSection" style="display: none;">
+                                <h4 style="font-size: 1rem; font-weight: 600; color: #38bdf8; margin-bottom: 0.5rem;">Recommendations:</h4>
+                                <ul style="margin: 0; padding-left: 1.5rem; color: #e2e8f0; font-size: 0.875rem;" id="frontalTipsListContainer">
+                                    <!-- Frontal recommendation items will be populated dynamically -->
+                                </ul>
+                            </div>
                         </div>
                         
                         <!-- Right side: Score -->
@@ -435,21 +439,25 @@
                     </div>
                     
                     <!-- Side View Section -->
-                    <div style="display: flex; justify-content: space-between;">
+                    <div id="sideViewSection" style="display: none; justify-content: space-between;">
                         <!-- Left side: Analysis and Recommendations -->
                         <div style="flex: 1; padding-right: 1rem;">
                             <div id="postureSideAnalysis" style="display: none;">{{postureSideAnalysis}}</div>
                             <div id="postureSideTips" style="display: none;">{{postureSideTips}}</div>
                             
-                            <h4 style="font-size: 1rem; font-weight: 600; color: #38bdf8; margin-bottom: 0.5rem;">Analysis:</h4>
-                            <ul style="margin: 0 0 1rem 0; padding-left: 1.5rem; color: #e2e8f0; font-size: 0.875rem;" id="sideAnalysisListContainer">
-                                <!-- Side analysis items will be populated dynamically -->
-                            </ul>
+                            <div id="sideAnalysisSection" style="display: none;">
+                                <h4 style="font-size: 1rem; font-weight: 600; color: #38bdf8; margin-bottom: 0.5rem;">Analysis:</h4>
+                                <ul style="margin: 0 0 1rem 0; padding-left: 1.5rem; color: #e2e8f0; font-size: 0.875rem;" id="sideAnalysisListContainer">
+                                    <!-- Side analysis items will be populated dynamically -->
+                                </ul>
+                            </div>
                             
-                            <h4 style="font-size: 1rem; font-weight: 600; color: #38bdf8; margin-bottom: 0.5rem;">Recommendations:</h4>
-                            <ul style="margin: 0; padding-left: 1.5rem; color: #e2e8f0; font-size: 0.875rem;" id="sideTipsListContainer">
-                                <!-- Side recommendation items will be populated dynamically -->
-                            </ul>
+                            <div id="sideTipsSection" style="display: none;">
+                                <h4 style="font-size: 1rem; font-weight: 600; color: #38bdf8; margin-bottom: 0.5rem;">Recommendations:</h4>
+                                <ul style="margin: 0; padding-left: 1.5rem; color: #e2e8f0; font-size: 0.875rem;" id="sideTipsListContainer">
+                                    <!-- Side recommendation items will be populated dynamically -->
+                                </ul>
+                            </div>
                         </div>
                         
                         <!-- Right side: Score -->
@@ -701,11 +709,57 @@
                                 }
                             }
                             
-                            // Populate all list containers
-                            populateListContainer('frontalAnalysisListContainer', frontalAnalysis);
-                            populateListContainer('sideAnalysisListContainer', sideAnalysis);
-                            populateListContainer('frontalTipsListContainer', frontalTips);
-                            populateListContainer('sideTipsListContainer', sideTips);
+                            // Check if we have valid posture data and show sections accordingly
+                            const frontalViewSection = document.getElementById('frontalViewSection');
+                            const sideViewSection = document.getElementById('sideViewSection');
+                            const frontalAnalysisSection = document.getElementById('frontalAnalysisSection');
+                            const frontalTipsSection = document.getElementById('frontalTipsSection');
+                            const sideAnalysisSection = document.getElementById('sideAnalysisSection');
+                            const sideTipsSection = document.getElementById('sideTipsSection');
+                            
+                            // Check if we have valid frontal posture data
+                            const hasFrontalAnalysis = frontalAnalysis && Array.isArray(frontalAnalysis) && frontalAnalysis.length > 0;
+                            const hasFrontalTips = frontalTips && Array.isArray(frontalTips) && frontalTips.length > 0;
+                            const hasFrontalScore = postureFrontalScoreDisplay.textContent && postureFrontalScoreDisplay.textContent !== 'N/A';
+                            
+                            // Check if we have valid side posture data
+                            const hasSideAnalysis = sideAnalysis && Array.isArray(sideAnalysis) && sideAnalysis.length > 0;
+                            const hasSideTips = sideTips && Array.isArray(sideTips) && sideTips.length > 0;
+                            const hasSideScore = postureSideScoreDisplay.textContent && postureSideScoreDisplay.textContent !== 'N/A';
+                            
+                            // Show frontal view section if we have any frontal data
+                            if (hasFrontalAnalysis || hasFrontalTips || hasFrontalScore) {
+                                if (frontalViewSection) frontalViewSection.style.display = 'flex';
+                                
+                                // Show analysis section if we have analysis data
+                                if (hasFrontalAnalysis && frontalAnalysisSection) {
+                                    frontalAnalysisSection.style.display = 'block';
+                                    populateListContainer('frontalAnalysisListContainer', frontalAnalysis);
+                                }
+                                
+                                // Show tips section if we have tips data
+                                if (hasFrontalTips && frontalTipsSection) {
+                                    frontalTipsSection.style.display = 'block';
+                                    populateListContainer('frontalTipsListContainer', frontalTips);
+                                }
+                            }
+                            
+                            // Show side view section if we have any side data
+                            if (hasSideAnalysis || hasSideTips || hasSideScore) {
+                                if (sideViewSection) sideViewSection.style.display = 'flex';
+                                
+                                // Show analysis section if we have analysis data
+                                if (hasSideAnalysis && sideAnalysisSection) {
+                                    sideAnalysisSection.style.display = 'block';
+                                    populateListContainer('sideAnalysisListContainer', sideAnalysis);
+                                }
+                                
+                                // Show tips section if we have tips data
+                                if (hasSideTips && sideTipsSection) {
+                                    sideTipsSection.style.display = 'block';
+                                    populateListContainer('sideTipsListContainer', sideTips);
+                                }
+                            }
                             
                             // Log for debugging
                             console.log('Posture data processed:', {
@@ -714,18 +768,9 @@
                                 frontalTips,
                                 sideTips,
                                 frontalScore: postureFrontalScoreDisplay.textContent,
-                                sideScore: postureSideScoreDisplay.textContent
-                            });
-                            
-                            // Add a fallback for empty containers
-                            document.querySelectorAll('#frontalAnalysisListContainer, #sideAnalysisListContainer, #frontalTipsListContainer, #sideTipsListContainer').forEach(container => {
-                                if (container.children.length === 0) {
-                                    const li = document.createElement('li');
-                                    li.textContent = 'No data available';
-                                    li.style.fontStyle = 'italic';
-                                    li.style.color = '#6b7280';
-                                    container.appendChild(li);
-                                }
+                                sideScore: postureSideScoreDisplay.textContent,
+                                hasFrontalData: hasFrontalAnalysis || hasFrontalTips || hasFrontalScore,
+                                hasSideData: hasSideAnalysis || hasSideTips || hasSideScore
                             });
                         } catch (error) {
                             console.error('Error processing posture data:', error);
