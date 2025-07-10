@@ -13,16 +13,16 @@ app.use(express.json());
 // Serve static files from the reports directory
 app.use("/reports", express.static(path.join(__dirname, "reports")));
 
-// Serve static frontend files
+// === Mount your API routes first ===
+app.use("/api/auth", authRoutes);
+app.use("/api/report", reportRoutes);
+
+// === Serve frontend AFTER API routes ===
 app.use(express.static(path.join(__dirname, "build")));
 
-// Fallback to React frontend for unknown routes
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
-
-app.use("/api/auth", authRoutes);
-app.use("/api/report", reportRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
