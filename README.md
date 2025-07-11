@@ -1,6 +1,6 @@
 # 📄 PDF Report Generation System
 
-A full-stack web application for secure user authentication and flexible PDF report generation based on pre-existing assessment data. Designed to support multiple assessment types with no code changes — only config updates!
+A full-stack web application for secure user authentication and flexible PDF report generation based on pre-existing assessment data. Designed to support multiple assessment types with no code changes - only config updates!
 
 ---
 Deployed link - https://pdf-report-generation-system.onrender.com
