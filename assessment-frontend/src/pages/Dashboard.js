@@ -1,7 +1,8 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import AuthContext from '../context/AuthContext';
+import { encodeFilePathForUrl } from '../utils/routeHelpers';
 
 const Dashboard = () => {
   const { currentUser, getAuthHeader, API_URL } = useContext(AuthContext);
@@ -210,7 +211,7 @@ const Dashboard = () => {
                 </button>
               ) : (
                 <button 
-                  onClick={() => navigate(`/view-report/${encodeURIComponent(generatedFilePath)}`)}
+                  onClick={() => navigate(`/view-report/${encodeFilePathForUrl(generatedFilePath)}`)}
                   className="flex-1 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-md transition-colors flex items-center justify-center"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">

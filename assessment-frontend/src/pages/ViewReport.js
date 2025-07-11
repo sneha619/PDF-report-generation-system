@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
+import { decodeFilePathFromUrl } from '../utils/routeHelpers';
 
 const ViewReport = () => {
   const { filePath } = useParams();
@@ -10,8 +11,8 @@ const ViewReport = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
-  // Decode the file path if it's URL encoded
-  const decodedFilePath = decodeURIComponent(filePath);
+  // Decode the file path using our utility function
+  const decodedFilePath = decodeFilePathFromUrl(filePath);
   
   // Construct the full URL to the PDF
   // Remove '/api' from the API_URL to get the base URL
