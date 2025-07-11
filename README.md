@@ -21,7 +21,7 @@ Deployed link - https://pdf-report-generation-system.onrender.com
 ---
 
 ## 📁 Project Structure
-
+```
 PDF-report-generation-system/
 ├── assessment-backend/ # Backend root
 │ ├── config/ # Config files (reportConfigs.js, etc.)
@@ -56,7 +56,7 @@ PDF-report-generation-system/
 
 ## 🧾 Sample Data Format (`data/data.js`)
 
-``js
+```js
 module.exports = [
   {
     session_id: "abc123",
@@ -76,9 +76,10 @@ module.exports = [
     }
   }
 ];
-``
+```
+
 ⚙️ Configuration Structure (config/reportConfigs.js)
-``
+```
 exports.assessmentTypes = {
   mental_health_01: {
     name: "Mental Health Assessment",
@@ -91,10 +92,12 @@ exports.assessmentTypes = {
     sections: ["heart_rate", "blood_pressure"]
   }
 };
-``
+```
+
+
 ✅ Section Configs
 
-``
+```
 exports.sectionConfigs = {
   stress: { title: "Stress Level", showCharts: false },
   anxiety: { title: "Anxiety Score" },
@@ -103,9 +106,11 @@ exports.sectionConfigs = {
   heart_rate: { title: "Heart Rate" },
   blood_pressure: { title: "Blood Pressure" }
 };
-``
+```
+
+
 ✅ Field Mappings
-``
+```
 exports.fieldMappings = {
   mental_health_01: {
     stress: "mental.stress_level",
@@ -118,22 +123,28 @@ exports.fieldMappings = {
     blood_pressure: "vitals.bp"
   }
 };
-``
+```
+
+
 ✅ Value Classification Ranges (Optional)
 
-``
+```
 exports.classificationRanges = {
   anxiety_score: { low: [0, 10], moderate: [11, 20], high: [21, 30] },
   hr: { normal: [60, 100], elevated: [101, 120], high: [121, 200] }
 };
-``
+```
+
+
 📡 API Endpoints
 🔐 Authentication
+
 POST /api/auth/signup — Register new users
 
 POST /api/auth/login — Authenticate existing users
 
 📝 Report Generation
+
 POST /generate-report?session_id=abc123
 → Generates PDF from existing session
 → Saves it in reports/ folder
