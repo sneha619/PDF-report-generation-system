@@ -1,5 +1,4 @@
-const chromium = require("chrome-aws-lambda");
-const puppeteer = require("puppeteer-core");
+const puppeteer = require("puppeteer");
 const fs = require("fs");
 const path = require("path");
 
@@ -9,20 +8,16 @@ module.exports = async function generatePDF(htmlContent, filename) {
     fs.mkdirSync(reportsDir, { recursive: true });
   }
 
-  const executablePath = await chromium.executablePath || '/usr/bin/chromium-browser';
-
   const browser = await puppeteer.launch({
-    args: chromium.args,
-    executablePath: executablePath,
-    headless: chromium.headless,
-    defaultViewport: { width: 1200, height: 1600 },
+    headless: true,
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
   });
 
   const page = await browser.newPage();
+  await page.setViewport({ width: 1200, height: 1600 });
   await page.setContent(htmlContent, { waitUntil: 'networkidle0' });
 
   const pdfPath = path.join(reportsDir, filename);
-
   await page.pdf({
     path: pdfPath,
     format: "A4",

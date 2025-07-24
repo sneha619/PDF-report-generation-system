@@ -13,7 +13,14 @@ module.exports = (req, res, next) => {
     const token = authHeader.split(' ')[1];
     
     // Verify token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret');
+    const jwtSecret = process.env.JWT_SECRET;
+
+    if (!jwtSecret) {
+      console.error("JWT_SECRET is not defined in environment!");
+      return res.status(500).json({ message: "Server misconfiguration: JWT_SECRET missing" });
+    }
+
+    const decoded = jwt.verify(token, jwtSecret);
     
     // Add user from payload to request
     req.user = decoded;
