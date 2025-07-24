@@ -6,15 +6,13 @@ cd ../assessment-frontend
 npm install
 npm run build
 
-# Step 2: Remove old build in backend (if exists)
+# Step 2: Remove old build if exists and move new one
 rm -rf ../assessment-backend/build
-
-# Step 3: Move new build into backend
 mv build ../assessment-backend/
 
-# Step 4: Setup backend
+# Step 3: Install backend dependencies
 cd ../assessment-backend
 npm install
 
-# Step 5: Install Puppeteer Chromium for Render
-npx puppeteer browsers install chrome
+# Step 4: Install Chromium for Puppeteer (Render-compatible)
+node -e "require('puppeteer').install()"
