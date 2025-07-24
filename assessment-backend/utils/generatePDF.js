@@ -1,4 +1,5 @@
-const puppeteer = require("puppeteer");
+const chromium = require("chrome-aws-lambda");
+const puppeteer = require("puppeteer-core");
 const fs = require("fs");
 const path = require("path");
 
@@ -8,19 +9,19 @@ module.exports = async function generatePDF(htmlContent, filename) {
   if (!fs.existsSync(reportsDir)) {
     fs.mkdirSync(reportsDir, { recursive: true });
   }
-  
-  const browser = await puppeteer.launch();
+
+  const browser = await puppeteer.launch({
+    args: chromium.args,
+    executablePath: await chromium.executablePath || '/usr/bin/chromium-browser',
+    headless: chromium.headless,
+    defaultViewport: { width: 1200, height: 1600 }
+  });
+
   const page = await browser.newPage();
-  
-  // Set viewport to ensure proper rendering
-  await page.setViewport({ width: 1200, height: 1600 });
-  
-  // Set content with proper waiting for network and rendering
   await page.setContent(htmlContent, { waitUntil: 'networkidle0' });
-  
+
   const pdfPath = path.join(reportsDir, filename);
-  
-  // Enhanced PDF options to prevent content splitting across pages
+
   await page.pdf({
     path: pdfPath,
     format: "A4",
@@ -33,8 +34,7 @@ module.exports = async function generatePDF(htmlContent, filename) {
     },
     preferCSSPageSize: true
   });
-  
+
   await browser.close();
-  
   return pdfPath;
 };
