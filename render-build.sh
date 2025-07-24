@@ -4,13 +4,13 @@
 set -e
 
 # Step 1: Build frontend
-cd frontend
+cd assessment-frontend
 npm install
 npm run build
 
 # Step 2: Move build into backend
 cd ..
-mv -f frontend/build assessment-backend/
+mv -f assessment-frontend/build assessment-backend/
 
 # Step 3: Install backend dependencies
 cd assessment-backend
