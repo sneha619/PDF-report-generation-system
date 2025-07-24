@@ -1,18 +1,15 @@
 #!/bin/bash
 set -e
 
-# Step 1: Build frontend
+# Build frontend
 cd ../assessment-frontend
 npm install
 npm run build
 
-# Step 2: Remove old build if exists and move new one
+# Move build to backend
 rm -rf ../assessment-backend/build
 mv build ../assessment-backend/
 
-# Step 3: Install backend dependencies
+# Setup backend
 cd ../assessment-backend
 npm install
-
-# Step 4: Install Chromium for Puppeteer (Render-compatible)
-node -e "require('puppeteer').install()"
