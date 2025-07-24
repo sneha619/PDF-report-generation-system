@@ -4,17 +4,18 @@ const fs = require("fs");
 const path = require("path");
 
 module.exports = async function generatePDF(htmlContent, filename) {
-  // Ensure reports directory exists
   const reportsDir = path.join(__dirname, "../reports");
   if (!fs.existsSync(reportsDir)) {
     fs.mkdirSync(reportsDir, { recursive: true });
   }
 
+  const executablePath = await chromium.executablePath || '/usr/bin/chromium-browser';
+
   const browser = await puppeteer.launch({
     args: chromium.args,
-    executablePath: await chromium.executablePath || '/usr/bin/chromium-browser',
+    executablePath: executablePath,
     headless: chromium.headless,
-    defaultViewport: { width: 1200, height: 1600 }
+    defaultViewport: { width: 1200, height: 1600 },
   });
 
   const page = await browser.newPage();
@@ -30,9 +31,9 @@ module.exports = async function generatePDF(htmlContent, filename) {
       top: "20px",
       right: "20px",
       bottom: "20px",
-      left: "20px"
+      left: "20px",
     },
-    preferCSSPageSize: true
+    preferCSSPageSize: true,
   });
 
   await browser.close();
