@@ -6,7 +6,7 @@ cd ../assessment-frontend
 npm install
 npm run build
 
-# Step 2: Clean old build if any
+# Step 2: Clean old build
 rm -rf ../assessment-backend/build
 
 # Step 3: Move build into backend
@@ -16,5 +16,5 @@ mv build ../assessment-backend/
 cd ../assessment-backend
 npm install
 
-# Step 5: Install Puppeteer Chromium manually (safe method)
-node -e "require('puppeteer').createBrowserFetcher({product: 'chrome'}).download('121.0.0.0')"
+# Step 5: Manually trigger Chromium download (new Puppeteer syntax)
+node -e "import('puppeteer').then(p => p.default.launch().then(b => b.close()))"
